@@ -81,7 +81,7 @@ class DefaultTest {
     @Test
     @DisplayName("Taxa de conversao entre dois providers diferentes")
     @Disabled("Nunca que dois providers vao bater ne. Entao este teste eh soh para fins academicos.")
-    void moneyExchangeRate() {
+    void moneyExchangeRateProvided() {
         final ExchangeRateProvider provedorDeCambioIMF = MonetaryConversions.getExchangeRateProvider(ExchangeRateType.IMF);
         final ExchangeRate taxaCambioIMF = provedorDeCambioIMF.getExchangeRate("BRL", "USD");
 
@@ -89,6 +89,15 @@ class DefaultTest {
         final ExchangeRate taxaCambioPadrao = provedorDeCambioPadrao.getExchangeRate("BRL", "USD");
 
         assertEquals(taxaCambioIMF.getFactor().numberValue(BigDecimal.class), taxaCambioPadrao.getFactor().numberValue(BigDecimal.class));
+    }
+
+    @Test
+    @DisplayName("Taxa de conversao para um exchange implementado")
+    void moneyExchangeRateCustom() {
+        final ExchangeRateProvider provedorDeCambio = new CustomRateProvider();
+        final ExchangeRate taxaCambio = provedorDeCambio.getExchangeRate("BRL", "USD");
+        assertEquals(BigDecimal.valueOf(1.5), taxaCambio.getFactor().numberValue(BigDecimal.class));
+        assertEquals(BigDecimal.ONE, provedorDeCambio.getExchangeRate("BRL", "BRL").getFactor().numberValue(BigDecimal.class));
     }
 
     @Test
