@@ -2,3 +2,7 @@
 .resourceCache
 *.iml
 target/
+.classpath
+.project
+.vscode
+.settings
